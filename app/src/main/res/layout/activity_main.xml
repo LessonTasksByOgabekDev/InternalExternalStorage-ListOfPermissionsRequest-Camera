@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:gravity="top|center_horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="@string/internal_storage_text"
+        android:textStyle="normal"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:layout_margin="15dp"/>
+
+    <Button
+        android:id="@+id/btn_save_internal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:textStyle="normal"
+        android:text="@string/save_internal"/>
+
+    <Button
+        android:id="@+id/btn_read_internal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:textStyle="normal"
+        android:text="@string/read_internal"
+        android:layout_marginBottom="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="@string/external_storage_text"
+        android:textStyle="normal"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:layout_margin="15dp"/>
+
+    <Button
+        android:id="@+id/btn_save_external"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:textStyle="normal"
+        android:text="@string/save_external"/>
+
+    <Button
+        android:id="@+id/btn_read_external"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:textStyle="normal"
+        android:text="@string/read_external"
+        android:layout_marginBottom="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="@string/save_photo_in_internal_or_external"
+        android:textStyle="normal"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:layout_margin="15dp"/>
+
+    <Button
+        android:id="@+id/take_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:textStyle="normal"
+        android:text="@string/take_photo"/>
+
+</LinearLayout>

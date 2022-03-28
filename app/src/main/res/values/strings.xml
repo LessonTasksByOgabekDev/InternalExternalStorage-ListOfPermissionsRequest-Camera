@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Internal&amp;ExternalStorages</string>
+    <string name="save_internal">Save Internal</string>
+    <string name="internal_storage_text">Internal Storage(Text)</string>
+    <string name="read_internal">Read Internal</string>
+    <string name="external_storage_text">External Storage (Text)</string>
+    <string name="save_external">Save External</string>
+    <string name="read_external">Read External</string>
+    <string name="save_photo_in_internal_or_external">Save photo in Internal or External</string>
+    <string name="take_photo">Take Photo</string>
+</resources>
