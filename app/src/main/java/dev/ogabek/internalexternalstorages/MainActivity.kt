@@ -1,24 +1,31 @@
 package dev.ogabek.internalexternalstorages
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
 import androidx.core.content.ContextCompat
 import java.io.*
 import java.lang.Exception
 import java.nio.charset.Charset
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
     private val isPersistent: Boolean = true
+    private val isInternal: Boolean = false
 
     private var readPermissionGranted = false
     private var writePermissionGranted = false
@@ -56,6 +63,11 @@ class MainActivity : AppCompatActivity() {
         readToExternal.setOnClickListener {
 
             readExternalFile()
+        }
+
+        val savePicture = findViewById<Button>(R.id.take_photo)
+        savePicture.setOnClickListener {
+            takePhoto.launch()
         }
 
     }
@@ -221,4 +233,67 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, String.format("Read from file %s failed", fileName), Toast.LENGTH_SHORT).show()
         }
     }
+
+    private val takePhoto = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+
+        val fileName = UUID.randomUUID().toString()
+
+        val isPhotoSaved = if (isInternal) {
+            savePhotoToInternalStorage(fileName, bitmap!!)
+        } else {
+            if (writePermissionGranted) {
+                savePhotoToExternalStorage(fileName, bitmap!!)
+            } else {
+                false
+            }
+        }
+
+
+
+    }
+
+    private fun savePhotoToInternalStorage(fileName: String, bmp: Bitmap): Boolean {
+        return try {
+            openFileOutput("$fileName.jpg", MODE_PRIVATE).use { steam ->
+                if (!bmp.compress(Bitmap.CompressFormat.JPEG, 100, steam)) {
+                    throw IOException("Couldn't save bitmap.")
+                }
+            }
+            true
+        } catch (e: IOException) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    private fun savePhotoToExternalStorage(fileName: String, bmp: Bitmap): Boolean {
+        val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL)
+        } else {
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        }
+
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "$fileName.jpg")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Images.Media.WIDTH, bmp.width)
+            put(MediaStore.Images.Media.HEIGHT, bmp.height)
+        }
+
+        return try {
+            contentResolver.insert(collection, contentValues)?.also { uri ->
+                contentResolver.openOutputStream(uri).use { outputStream ->
+                    if (!bmp.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)) {
+                        throw IOException("Couldn't save Bitmap")
+                    }
+                }
+            } ?: throw IOException("Couldn't create Media Store entry")
+            true
+        } catch (e: IOException) {
+            e.printStackTrace()
+            false
+        }
+
+    }
+
 }
